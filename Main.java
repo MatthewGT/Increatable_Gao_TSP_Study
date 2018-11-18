@@ -2,7 +2,19 @@ import java.io.IOException;
 
 public class Main {
     public static void main(String[] args) throws IOException{
-        city c = FileIO.readFile("Cincinnati.tsp");
+
+		if (args.length != 4) {
+			System.out.println("Wrong input parameter number!");
+			return;
+		}
+
+		String filename = args[0];
+		String alg = args[1];
+		int cut_off = Integer.parseInt(args[2]);
+		int seed = Integer.parseInt(args[3]);
+
+
+        city c = FileIO.readFile(filename);
 //		for (int i = 0; i < c.getNum(); i++) {
 //			System.out.print(c.getCoordinate().get(i).getNumber() + " ");
 //			System.out.print(c.getCoordinate().get(i).getx() + " ");
@@ -31,12 +43,23 @@ public class Main {
 		city tt = new city("test","test",4);
 		tt.setDistances(test);
 
-		branchAndBound bb = new branchAndBound(c.getNum(),c);
-		bb.branchBound();
-		System.out.println((int)bb.getFinalCost());
-		int[] path = bb.getFinalPath();
-		for(int i = c.getNum() - 1; i >= 0; i--){
-			System.out.println(path[(i+1) % c.getNum()] + " " + path[i] + " " + Math.round(c.getDistances()[path[i]][path[i+1]]));
+		if (alg.equals("BnB")) {
+			branchAndBound bb = new branchAndBound(c.getNum(),c);
+			bb.branchBound();
+			System.out.println((int)bb.getFinalCost());
+			int[] path = bb.getFinalPath();
+			for(int i = c.getNum() - 1; i >= 0; i--){
+				System.out.println(path[(i+1) % c.getNum()] + " " + path[i] + " " + Math.round(c.getDistances()[path[i]][path[i+1]]));
+			}
+		} else if (alg.equals("Approx")) {
+
+		} else if (alg.equals("LS1")) {
+
+		} else if (alg.equals("LS2")) {
+
+		} else {
+			System.out.println("No such algorithm!");
+			return;
 		}
     }
 }
