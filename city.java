@@ -52,7 +52,6 @@ public class city {
 
     /// calculate the distance between any two locations
     public void calDistance(){
-
         for(int i = 0;i < this.locationNum;i++){
             for(int j = i+1;j < this.locationNum;j++){
                 double x1 = this.coordinates.get(i).getx();
@@ -65,6 +64,7 @@ public class city {
             }
         }
     }
+
     public void setDistances(double[][] test){
         this.distances = test;
     }

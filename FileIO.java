@@ -72,10 +72,9 @@ public class FileIO {
 		bb.branchBound();
 		System.out.println(bb.getFinalCost());
 		int[] path = bb.getFinalPath();
-		for(int i = 0;i < c.getNum();i++){
-			System.out.println(path[i] + " " + c.getDistances()[path[i]][path[i+1]]);
+		for(int i = 0;i < tt.getNum();i++){
+			System.out.println(path[i] + " " + path[i+1] + " " + tt.getDistances()[path[i]][path[i+1]]);
 		}
-
     }
 }
 
