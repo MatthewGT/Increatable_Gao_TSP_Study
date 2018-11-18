@@ -1,4 +1,5 @@
 
 public class FastInsert{
-	System.out.println("yang");    
+	System.out.println("yang");
+	int a = 1;    
 }
