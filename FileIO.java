@@ -1,5 +1,3 @@
-package CSE6140project;
-
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -27,17 +25,17 @@ public class FileIO {
             }
         }
 
-		
+
 		city c = new city(name, distanceType, size);
 		while (true) {
 			String line = br.readLine();
-			if (line.equals("EOF")) {
+			if (line.trim().equals("EOF")) {
 				break;
 			}
-			int num = Integer.parseInt(line.split(" ")[0]);
-			double x = Double.parseDouble(line.split(" ")[1]);
-			double y = Double.parseDouble(line.split(" ")[2]);
-			c.addCoordinate(num, x, y);	
+			int num = Integer.parseInt(line.trim().split(" ")[0]);
+			double x = Double.parseDouble(line.trim().split(" ")[1]);
+			double y = Double.parseDouble(line.trim().split(" ")[2]);
+			c.addCoordinate(num, x, y);
 		}
 
 		br.close();
@@ -45,13 +43,19 @@ public class FileIO {
 	}
 
 	public static void main(String[] args) throws IOException{
-		city c = readFile("Cincinnati.tsp");
+		city c = readFile("ulysses16.tsp");
 //		for (int i = 0; i < c.getNum(); i++) {
 //			System.out.print(c.getCoordinate().get(i).getNumber() + " ");
 //			System.out.print(c.getCoordinate().get(i).getx() + " ");
 //			System.out.println(c.getCoordinate().get(i).gety());
 //		}
-		c.calDistance();
+
+		if (c.getDistanceType().equals("EUC_2D")) {
+			c.calDistance();
+		} else {
+			c.calGeoDistance();
+		}
+
 		double[][] distances = c.getDistances();
 //		for (int i = 0; i < c.getNum(); i++) {
 //			String temp = "";
@@ -70,10 +74,10 @@ public class FileIO {
 
 		branchAndBound bb = new branchAndBound(c.getNum(),c);
 		bb.branchBound();
-		System.out.println(bb.getFinalCost());
+		System.out.println((int)bb.getFinalCost());
 		int[] path = bb.getFinalPath();
-		for(int i = 0;i < c.getNum();i++){
-			System.out.println(path[i] + " " + c.getDistances()[path[i]][path[i+1]]);
+		for(int i = c.getNum() - 1; i >= 0; i--){
+			System.out.println(path[(i+1) % c.getNum()] + " " + path[i] + " " + Math.round(c.getDistances()[path[i]][path[i+1]]));
 		}
 
     }

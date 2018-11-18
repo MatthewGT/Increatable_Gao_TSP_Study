@@ -1,6 +1,3 @@
-package CSE6140project;
-
-
 public class location {
     private int number;
     private double x;
