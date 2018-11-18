@@ -1,4 +1,5 @@
 import java.io.IOException;
+import java.util.*;
 
 public class Main {
     public static void main(String[] args) throws IOException{
@@ -12,7 +13,7 @@ public class Main {
 		String alg = args[1];
 		int cut_off = Integer.parseInt(args[2]);
 		int seed = Integer.parseInt(args[3]);
-
+		String outfile = filename.split("\\.")[0] + "_" + alg + "_" + Integer.toString(cut_off) + ".trace";
 
         city c = FileIO.readFile(filename);
 //		for (int i = 0; i < c.getNum(); i++) {
@@ -45,12 +46,13 @@ public class Main {
 
 		if (alg.equals("BnB")) {
 			branchAndBound bb = new branchAndBound(c.getNum(),c);
-			bb.branchBound();
+			List<List<Double>> output = bb.branchBound();
 			System.out.println((int)bb.getFinalCost());
 			int[] path = bb.getFinalPath();
 			for(int i = c.getNum() - 1; i >= 0; i--){
 				System.out.println(path[(i+1) % c.getNum()] + " " + path[i] + " " + Math.round(c.getDistances()[path[i]][path[i+1]]));
 			}
+			FileIO.writeData(output, outfile);
 		} else if (alg.equals("Approx")) {
 
 		} else if (alg.equals("LS1")) {

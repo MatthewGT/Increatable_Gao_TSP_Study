@@ -1,10 +1,12 @@
 import java.util.*;
+import java.lang.*;
 
 public class branchAndBound {
     private int nums;
     private int[] finalPath;
     private boolean[] visited;
     private double finalCost;
+    private List<List<Double>> output;
     private city c;
 
     public branchAndBound(int N,city City){
@@ -13,6 +15,7 @@ public class branchAndBound {
         this.visited = new boolean[N];
         this.finalCost = Double.MAX_VALUE;
         this.c = City;
+        this.output = new ArrayList<>();
     }
 
     private void convertToFianl(int[] path){
@@ -55,12 +58,22 @@ public class branchAndBound {
         Arrays.fill(this.visited,false);
     }
 
-    private void recursion(double currBond,double currCost,int level,int[] currpath){
+    private void recursion(double currBond,double currCost,int level,int[] currpath,long start){
         if(level == this.nums && this.c.getDistances()[currpath[level-1]][currpath[0]] != 0.0){
             double tempCurrCost = currCost + this.c.getDistances()[currpath[level-1]][currpath[0]];
             if(tempCurrCost < this.finalCost){
                 convertToFianl(currpath);
                 this.finalCost = tempCurrCost;
+                List<Double> temp = new ArrayList<>();
+                temp.add((double) (System.currentTimeMillis()- start));
+                temp.add(this.finalCost);
+                // System.out.println("-----better choice occurs------");
+                // System.out.println("current run time: " + (System.currentTimeMillis()- start));
+                // System.out.println((System.currentTimeMillis()- start) + "," + (int)this.finalCost);
+//                for(int i = 0;i < this.nums-1;i++){
+//                    System.out.println(currpath[i] + " " + currpath[i+1] + " " + this.c.getDistances()[currpath[i]][currpath[i+1]]);
+//                }
+                output.add(temp);
             }
             return;
         }
@@ -77,7 +90,7 @@ public class branchAndBound {
                 if(currBond + currCost < this.finalCost){
                     currpath[level] = i;
                     this.visited[i] = true;
-                    recursion(currBond,currCost,level+1,currpath);
+                    recursion(currBond,currCost,level+1,currpath,start);
                 }
                 currCost -= this.c.getDistances()[currpath[level-1]][i];
                 currBond = temp;
@@ -88,7 +101,8 @@ public class branchAndBound {
         }
     }
 
-    public void branchBound(){
+    public List<List<Double>> branchBound(){
+        long start = System.currentTimeMillis();
         int[] currPath = new int[this.nums];
         double currBound = 0.0;
         for(int i = 0;i < this.nums;i++)
@@ -97,9 +111,11 @@ public class branchAndBound {
         for (int i = 0; i < this.nums; i++) {
             currBound += firstMin(i) + secondMin(i);
         }
+        currBound = currBound/2;
         this.visited[0] = true;
         currPath[0] = 0;
-        recursion(currBound,0.0,1,currPath);
+        recursion(currBound,0.0,1,currPath,start);
+        return output;
     }
 
     public int[] getFinalPath(){
