@@ -55,8 +55,6 @@ public class FarthestInsert{
         for (int i=0; i<dim; i++) {
             from = path.get(i);
             to = path.get(i+1);
-            // double p = (matrix[from][k]+matrix[k][to]+matrix[from][to])/2;
-            // double dist = Math.pow(p*(p-matrix[from][k])*(p-matrix[k][to])*(p-matrix[from][to]),0.5)*2/(matrix[from][to]);
             double dist = matrix[from][k]+matrix[k][to] - matrix[from][to];
             if (dist < min) {
                 min = dist;
