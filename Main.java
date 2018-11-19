@@ -10,22 +10,23 @@ public class Main {
 			return;
 		}
 
-		String filename = args[0];
+		String filename1 = args[0];
+		String filename = "../DATA/" + filename1;
 		String alg = args[1];
 		int cut_off = Integer.parseInt(args[2]);
 		int seed = Integer.parseInt(args[3]);
 		String outfile;
 		String outfile2;
 		if (alg.equals("BnB") || alg.equals("Approx")) {
-			outfile = filename.split("\\.")[0] + "_" + alg + "_" + Integer.toString(cut_off) + ".trace";
+			outfile = filename1.split("\\.")[0] + "_" + alg + "_" + Integer.toString(cut_off) + ".trace";
 		} else {
-			outfile = filename.split("\\.")[0] + "_" + alg + "_" + Integer.toString(cut_off) + "_" + Integer.toString(seed) + ".trace";
+			outfile = filename1.split("\\.")[0] + "_" + alg + "_" + Integer.toString(cut_off) + "_" + Integer.toString(seed) + ".trace";
 		}
 
 		if (alg.equals("BnB") || alg.equals("Approx")) {
-			outfile2 = filename.split("\\.")[0] + "_" + alg + "_" + Integer.toString(cut_off) + ".sol";
+			outfile2 = filename1.split("\\.")[0] + "_" + alg + "_" + Integer.toString(cut_off) + ".sol";
 		} else {
-			outfile2 = filename.split("\\.")[0] + "_" + alg + "_" + Integer.toString(cut_off) + "_" + Integer.toString(seed) + ".sol";
+			outfile2 = filename1.split("\\.")[0] + "_" + alg + "_" + Integer.toString(cut_off) + "_" + Integer.toString(seed) + ".sol";
 		}
 		
 
