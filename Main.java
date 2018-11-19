@@ -1,4 +1,5 @@
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.*;
 
 public class Main {
@@ -13,7 +14,20 @@ public class Main {
 		String alg = args[1];
 		int cut_off = Integer.parseInt(args[2]);
 		int seed = Integer.parseInt(args[3]);
-		String outfile = filename.split("\\.")[0] + "_" + alg + "_" + Integer.toString(cut_off) + ".trace";
+		String outfile;
+		String outfile2;
+		if (alg.equals("BnB") || alg.equals("Approx")) {
+			outfile = filename.split("\\.")[0] + "_" + alg + "_" + Integer.toString(cut_off) + ".trace";
+		} else {
+			outfile = filename.split("\\.")[0] + "_" + alg + "_" + Integer.toString(cut_off) + "_" + Integer.toString(seed) + ".trace";
+		}
+
+		if (alg.equals("BnB") || alg.equals("Approx")) {
+			outfile2 = filename.split("\\.")[0] + "_" + alg + "_" + Integer.toString(cut_off) + ".sol";
+		} else {
+			outfile2 = filename.split("\\.")[0] + "_" + alg + "_" + Integer.toString(cut_off) + "_" + Integer.toString(seed) + ".sol";
+		}
+		
 
         city c = FileIO.readFile(filename);
 //		for (int i = 0; i < c.getNum(); i++) {
@@ -52,6 +66,17 @@ public class Main {
 			for(int i = c.getNum() - 1; i >= 0; i--){
 				System.out.println(path[(i+1) % c.getNum()] + " " + path[i] + " " + Math.round(c.getDistances()[path[i]][path[i+1]]));
 			}
+			PrintWriter output2 = new PrintWriter(outfile2, "UTF-8");
+			output2.println((int)bb.getFinalCost());
+			output2.printf("%d,", path[0]);
+			for(int i = c.getNum() - 1; i >= 0; i--) {
+				if (i == 0) {
+					output2.printf("%d", path[i]);
+				} else {
+					output2.printf("%d,", path[i]);
+				}
+			}
+			output2.close();
 			FileIO.writeData(output, outfile);
 		} else if (alg.equals("Approx")) {
 
