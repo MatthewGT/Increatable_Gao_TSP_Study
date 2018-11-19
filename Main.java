@@ -60,24 +60,12 @@ public class Main {
 
 		if (alg.equals("BnB")) {
 			branchAndBound bb = new branchAndBound(c.getNum(),c);
-			List<List<Double>> output = bb.branchBound();
+			bb.branchBound(outfile, outfile2, cut_off);
 			System.out.println((int)bb.getFinalCost());
 			int[] path = bb.getFinalPath();
 			for(int i = c.getNum() - 1; i >= 0; i--){
 				System.out.println(path[(i+1) % c.getNum()] + " " + path[i] + " " + Math.round(c.getDistances()[path[i]][path[i+1]]));
 			}
-			PrintWriter output2 = new PrintWriter(outfile2, "UTF-8");
-			output2.println((int)bb.getFinalCost());
-			output2.printf("%d,", path[0]);
-			for(int i = c.getNum() - 1; i >= 0; i--) {
-				if (i == 0) {
-					output2.printf("%d", path[i]);
-				} else {
-					output2.printf("%d,", path[i]);
-				}
-			}
-			output2.close();
-			FileIO.writeData(output, outfile);
 		} else if (alg.equals("Approx")) {
 
 		} else if (alg.equals("LS1")) {

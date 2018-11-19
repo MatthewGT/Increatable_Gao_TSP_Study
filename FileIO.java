@@ -43,13 +43,13 @@ public class FileIO {
 		return c;
 	}
 
-	public static void writeData(List<List<Double>> outputdata, String outputFile) throws IOException {
-		PrintWriter output = new PrintWriter(outputFile, "UTF-8");
-		for (int i = 0; i < outputdata.size(); i++) {
-			output.println(outputdata.get(i).get(0) + "," + Math.round(outputdata.get(i).get(1)));
-		}
-		output.close();
-	}
+	// public static void writeData(List<List<Double>> outputdata, String outputFile) throws IOException {
+	// 	PrintWriter output = new PrintWriter(outputFile, "UTF-8");
+	// 	for (int i = 0; i < outputdata.size(); i++) {
+	// 		output.println(outputdata.get(i).get(0) + "," + Math.round(outputdata.get(i).get(1)));
+	// 	}
+	// 	output.close();
+	// }
 }
 
 
