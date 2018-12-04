@@ -1,12 +1,16 @@
-package CSE6140project;
+//package CSE6140project;
+
 import java.util.*;
+import java.io.PrintWriter;
+import java.io.IOException;
 import java.lang.*;
 
-public class branchAndBound {
+public class branchAndBound{
     private int nums;
     private int[] finalPath;
     private boolean[] visited;
     private double finalCost;
+    private List<List<Double>> output;
     private city c;
 
     public branchAndBound(int N,city City){
@@ -15,6 +19,7 @@ public class branchAndBound {
         this.visited = new boolean[N];
         this.finalCost = Double.MAX_VALUE;
         this.c = City;
+        this.output = new ArrayList<>();
     }
 
     private void convertToFianl(int[] path){
@@ -57,18 +62,38 @@ public class branchAndBound {
         Arrays.fill(this.visited,false);
     }
 
-    private void recursion(double currBond,double currCost,int level,int[] currpath,long start){
+    private void recursion(double currBond,double currCost,int level,int[] currpath,long start, String outfile1, String outfile2, int cut_off) throws IOException{
         if(level == this.nums && this.c.getDistances()[currpath[level-1]][currpath[0]] != 0.0){
             double tempCurrCost = currCost + this.c.getDistances()[currpath[level-1]][currpath[0]];
             if(tempCurrCost < this.finalCost){
                 convertToFianl(currpath);
                 this.finalCost = tempCurrCost;
-                System.out.println("-----better choice occurs------");
-                System.out.println("current run time: " + (System.currentTimeMillis()- start));
-                System.out.println("current minimum cost: " + this.finalCost);
-//                for(int i = 0;i < this.nums-1;i++){
-//                    System.out.println(currpath[i] + " " + currpath[i+1] + " " + this.c.getDistances()[currpath[i]][currpath[i+1]]);
-//                }
+                if ((double)(System.currentTimeMillis()- start) / 1000 > cut_off) {
+                    PrintWriter output1 = new PrintWriter(outfile1);
+                    for (int i = 0; i < output.size(); i++) {
+                        output1.println(output.get(i).get(0) + "," + Math.round(output.get(i).get(1)));
+                    }
+                    output1.close();
+                    PrintWriter output2 = new PrintWriter(outfile2);
+                    int[] path = this.finalPath;
+                    output2.println((int)this.finalCost);
+                    for (int i = path.length - 1; i >= 0; i--) {
+                        if (i == 0) {
+                            output2.printf("%d", path[i]);
+                        } else {
+                            output2.printf("%d,", path[i]);
+                        }
+                    }
+                    output2.close();
+                    System.exit(0);
+                }
+
+
+                List<Double> temp = new ArrayList<>();
+                temp.add((double) (System.currentTimeMillis()- start) / 1000);
+                temp.add(this.finalCost);
+
+                output.add(temp);
             }
             return;
         }
@@ -85,7 +110,7 @@ public class branchAndBound {
                 if(currBond + currCost < this.finalCost){
                     currpath[level] = i;
                     this.visited[i] = true;
-                    recursion(currBond,currCost,level+1,currpath,start);
+                    recursion(currBond,currCost,level+1,currpath,start,outfile1, outfile2, cut_off);
                 }
                 currCost -= this.c.getDistances()[currpath[level-1]][i];
                 currBond = temp;
@@ -96,7 +121,7 @@ public class branchAndBound {
         }
     }
 
-    public void branchBound(){
+    public void branchBound(String outfile1, String outfile2, int cut_off) throws IOException{
         long start = System.currentTimeMillis();
         int[] currPath = new int[this.nums];
         double currBound = 0.0;
@@ -109,7 +134,23 @@ public class branchAndBound {
         currBound = currBound/2;
         this.visited[0] = true;
         currPath[0] = 0;
-        recursion(currBound,0.0,1,currPath,start);
+        recursion(currBound,0.0,1,currPath,start, outfile1, outfile2, cut_off);
+        PrintWriter output1 = new PrintWriter(outfile1);
+        for (int i = 0; i < output.size(); i++) {
+            output1.println(output.get(i).get(0) + "," + Math.round(output.get(i).get(1)));
+        }
+        output1.close();
+        PrintWriter output2 = new PrintWriter(outfile2);
+        int[] path = this.finalPath;
+        output2.println((int)this.finalCost);
+        for (int i = path.length - 1; i >= 0; i--) {
+            if (i == 0) {
+                output2.printf("%d", path[i]);
+            } else {
+                output2.printf("%d,", path[i]);
+            }
+        }
+        output2.close();
     }
 
     public int[] getFinalPath(){

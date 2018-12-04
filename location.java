@@ -1,5 +1,4 @@
-package CSE6140project;
-
+//package CSE6140project;
 
 public class location {
     private int number;
