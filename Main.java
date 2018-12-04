@@ -18,13 +18,13 @@ public class Main {
         int seed = Integer.parseInt(args[3]);
         String outfile;
         String outfile2;
-        if (alg.equals("BnB") || alg.equals("Approx") || alg.equals("LS2")) {
+        if (alg.equals("BnB") || alg.equals("Approx") ) {
             outfile = filename1.split("\\.")[0] + "_" + alg + "_" + Integer.toString(cut_off) + ".trace";
         } else {
             outfile = filename1.split("\\.")[0] + "_" + alg + "_" + Integer.toString(cut_off) + "_" + Integer.toString(seed) + ".trace";
         }
 
-        if (alg.equals("BnB") || alg.equals("Approx") || alg.equals("LS2")) {
+        if (alg.equals("BnB") || alg.equals("Approx") ) {
             outfile2 = filename1.split("\\.")[0] + "_" + alg + "_" + Integer.toString(cut_off) + ".sol";
         } else {
             outfile2 = filename1.split("\\.")[0] + "_" + alg + "_" + Integer.toString(cut_off) + "_" + Integer.toString(seed) + ".sol";
@@ -70,7 +70,7 @@ public class Main {
 
         } else if (alg.equals("LS2")) {
             Iteratedlocalsearch bb = new Iteratedlocalsearch(c.getNum(),c,seed);
-            bb.iterateLocalSearch(1000000000,10000,outfile, outfile2, cut_off);
+            bb.iterateLocalSearch(1000000000,50,outfile, outfile2, cut_off);
             System.out.println((int)bb.getFinalCost());
             int[] path = bb.getFinalPath();
 //            for(int i = c.getNum() - 1; i >= 0; i--){

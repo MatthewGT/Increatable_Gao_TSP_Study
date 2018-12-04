@@ -55,23 +55,24 @@ public class Iteratedlocalsearch {
     }
 
     /////exchange parts of current path
-    private void addPerturtation(int[] finalPath, int[] currentPath){
-        int len = finalPath.length;
+    private void addPerturtation(){
+        int len = this.finalPath.length;
         int end1 = 1 + Math.abs(this.rand.nextInt()) % (len/3);
         int end2 = end1 + Math.abs(this.rand.nextInt()) % (len/3);
         LinkedList<Integer> list = new LinkedList<>();
         for(int i = 0;i < end1;i++){
-            list.add(finalPath[i]);
+            list.add(this.finalPath[i]);
         }
         for(int i = end2;i < len;i++){
-            list.add(finalPath[i]);
+            list.add(this.finalPath[i]);
         }
         for (int i = end1;i < end2;i++){
-            list.add(finalPath[i]);
+            list.add(this.finalPath[i]);
         }
         for(int i = 0;i < len;i++){
-            currentPath[i] = list.pollFirst();
+            this.currentPath[i] = list.pollFirst();
         }
+
 
     }
 
@@ -88,6 +89,7 @@ public class Iteratedlocalsearch {
         int count = 0;
         int len = path.length;
         int[] currPath = new int[len];
+        double temp = 0.0;
         while (count < maxImprove){
             for(int i = 0;i < len-1;i++){
                 for(int j = i+1;j < len;j++){
@@ -98,22 +100,23 @@ public class Iteratedlocalsearch {
                     currPath = swap(currPath,i,j);
                     double currentCost = getCost(graph,currPath);
                     if(currentCost < cost){
+
                         count = 0;
                         for (int k = 0; k < len ; k++) {
                             path[k] = currPath[k];
                         }
                         cost = currentCost;
+                        temp = currentCost;
                     }
                 }
             }
             count++;
         }
-
-        return cost;
+        return temp == 0.0?cost:temp;
     }
 
     private void perturbation(double[][] graph){
-        addPerturtation(this.finalPath,this.currentPath);
+        addPerturtation();
         this.currentCost = getCost(graph,currentPath);
     }
     private void printpath(int[] path){
@@ -128,13 +131,14 @@ public class Iteratedlocalsearch {
         this.finalCost = getCost(graph, this.finalPath);
         int len = this.finalPath.length;
         this.finalCost = localSearch(this.finalPath,this.finalCost,graph,maxImprove);
-//        if ((double)(System.currentTimeMillis()- start) / 1000 < cut_off) {
+
         for (int i = 0; i < maxSearchTimes; i++) {
             perturbation(graph);
             this.currentCost = localSearch(this.currentPath, this.currentCost, graph, maxImprove);
             if ((double)(System.currentTimeMillis()- start) / 1000 > cut_off) {
                 break;
             }
+
             if (this.currentCost < this.finalCost) {
                 for (int j = 0; j < len; j++) {
                     this.finalPath[j] = this.currentPath[j];
